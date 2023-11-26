@@ -1,9 +1,8 @@
 CREATE SCHEMA IF NOT EXISTS VisitorTracking;
-
 USE VisitorTracking;
 
 CREATE TABLE IF NOT EXISTS Address (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     street VARCHAR(255) NOT NULL,
     number VARCHAR(10) NOT NULL,
     postcode VARCHAR(10) NOT NULL,
@@ -12,14 +11,14 @@ CREATE TABLE IF NOT EXISTS Address (
 );
 
 CREATE TABLE IF NOT EXISTS Company (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES Address(id)
 );
 
 CREATE TABLE IF NOT EXISTS Person (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     mail VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(15) UNIQUE NOT NULL,
@@ -28,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Person (
 );
 
 CREATE TABLE IF NOT EXISTS Company_Employee (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     company_id INT,
     person_id INT,
     job_title VARCHAR(255),
@@ -38,12 +37,12 @@ CREATE TABLE IF NOT EXISTS Company_Employee (
 );
 
 CREATE TABLE IF NOT EXISTS Visit_Purpose (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     reason VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Visit (
-    id INT PRIMARY KEY,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     visitor_id INT,
     employee_id INT,
     company_id INT,
