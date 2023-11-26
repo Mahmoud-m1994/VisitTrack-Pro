@@ -1,9 +1,9 @@
 from database.DatabaseConnector import disconnect_from_mysql, connect_to_mysql
 from models.Address import Address
-from models.MySqlResponse import MySqlResponse
+from models.MyResponse import MyResponse
 
 
-def create_address(address: Address) -> MySqlResponse:
+def create_address(address: Address) -> MyResponse:
     connection = connect_to_mysql()
     cursor = connection.cursor()
 
@@ -15,15 +15,15 @@ def create_address(address: Address) -> MySqlResponse:
                        (address.street, address.number, address.postcode, address.city, address.floor))
         connection.commit()
 
-        return MySqlResponse("Address created successfully", response_code=MySqlResponse.CREATED)
+        return MyResponse("Address created successfully", response_code=MyResponse.CREATED)
     except Exception as err:
-        return MySqlResponse(f"Error creating address: {err}", response_code=MySqlResponse.ERROR)
+        return MyResponse(f"Error creating address: {err}", response_code=MyResponse.ERROR)
     finally:
         cursor.close()
         disconnect_from_mysql(connection)
 
 
-def fetch_addresses() -> MySqlResponse:
+def fetch_addresses() -> MyResponse:
     connection = connect_to_mysql()
     cursor = connection.cursor()
 
@@ -39,18 +39,18 @@ def fetch_addresses() -> MySqlResponse:
             addresses.append(address)
 
         if len(addresses) == 0:
-            return MySqlResponse("No addresses found", response_code=MySqlResponse.NOT_FOUND)
+            return MyResponse("No addresses found", response_code=MyResponse.NOT_FOUND)
 
-        return MySqlResponse(addresses, response_code=MySqlResponse.OK)
+        return MyResponse(addresses, response_code=MyResponse.OK)
     except Exception as err:
         print(f"Error retrieving addresses: {err}")
-        return MySqlResponse("Error retrieving addresses", response_code=MySqlResponse.ERROR)
+        return MyResponse("Error retrieving addresses", response_code=MyResponse.ERROR)
     finally:
         cursor.close()
         disconnect_from_mysql(connection)
 
 
-def get_address_by_id(address_id: int) -> MySqlResponse:
+def get_address_by_id(address_id: int) -> MyResponse:
     connection = connect_to_mysql()
     cursor = connection.cursor()
 
@@ -62,17 +62,17 @@ def get_address_by_id(address_id: int) -> MySqlResponse:
         if row:
             address = Address(address_id=row[0], street=row[1], number=row[2], postcode=row[3], city=row[4],
                               floor=row[5])
-            return MySqlResponse(response=address, response_code=MySqlResponse.OK)
+            return MyResponse(response=address, response_code=MyResponse.OK)
         else:
-            return MySqlResponse(response="Address not found", response_code=MySqlResponse.NOT_FOUND)
+            return MyResponse(response="Address not found", response_code=MyResponse.NOT_FOUND)
     except Exception as error:
-        return MySqlResponse(response=f"Error retrieving address by ID: {error}", response_code=MySqlResponse.ERROR)
+        return MyResponse(response=f"Error retrieving address by ID: {error}", response_code=MyResponse.ERROR)
     finally:
         cursor.close()
         disconnect_from_mysql(connection)
 
 
-def update_address(address: Address) -> MySqlResponse:
+def update_address(address: Address) -> MyResponse:
     connection = connect_to_mysql()
     cursor = connection.cursor()
 
@@ -86,18 +86,18 @@ def update_address(address: Address) -> MySqlResponse:
         connection.commit()
 
         if cursor.rowcount > 0:
-            return MySqlResponse("Address updated successfully", MySqlResponse.OK)
+            return MyResponse("Address updated successfully", MyResponse.OK)
         else:
-            return MySqlResponse("Address not found", MySqlResponse.NOT_FOUND)
+            return MyResponse("Address not found", MyResponse.NOT_FOUND)
     except Exception as error:
         print("Error updating address:", error)
-        return MySqlResponse("Error updating address", MySqlResponse.ERROR)
+        return MyResponse("Error updating address", MyResponse.ERROR)
     finally:
         cursor.close()
         disconnect_from_mysql(connection)
 
 
-def delete_address(address_id: int) -> MySqlResponse:
+def delete_address(address_id: int) -> MyResponse:
     connection = connect_to_mysql()
     cursor = connection.cursor()
 
@@ -107,12 +107,12 @@ def delete_address(address_id: int) -> MySqlResponse:
         connection.commit()
 
         if cursor.rowcount > 0:
-            return MySqlResponse("Address deleted successfully", MySqlResponse.OK)
+            return MyResponse("Address deleted successfully", MyResponse.OK)
         else:
-            return MySqlResponse("Address not found", MySqlResponse.NOT_FOUND)
+            return MyResponse("Address not found", MyResponse.NOT_FOUND)
     except Exception as error:
         print("Error deleting address:", error)
-        return MySqlResponse("Error deleting address", MySqlResponse.ERROR)
+        return MyResponse("Error deleting address", MyResponse.ERROR)
     finally:
         cursor.close()
         disconnect_from_mysql(connection)
