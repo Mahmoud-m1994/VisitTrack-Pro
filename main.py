@@ -6,4 +6,4 @@ app.register_blueprint(address_api)
 
 if __name__ == '__main__':
     print('Hey from Task tracking server')
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
