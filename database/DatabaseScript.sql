@@ -11,13 +11,13 @@ CREATE TABLE IF NOT EXISTS Address (
 );
 
 CREATE TABLE IF NOT EXISTS Company (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id VARCHAR(20) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address_id INT,
     FOREIGN KEY (address_id) REFERENCES Address(id)
 );
 
-CREATE TABLE IF NOT EXISTS Person (
+CREATE TABLE IF NOT EXISTS Employee (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     mail VARCHAR(255) UNIQUE NOT NULL,
@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS Person (
 
 CREATE TABLE IF NOT EXISTS Company_Employee (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    company_id INT,
-    person_id INT,
+    company_id VARCHAR(20),
+    employee_id INT,
     job_title VARCHAR(255),
     started_date DATE,
     FOREIGN KEY (company_id) REFERENCES Company(id),
-    FOREIGN KEY (person_id) REFERENCES Person(id)
+    FOREIGN KEY (employee_id) REFERENCES Employee(id)
 );
 
 CREATE TABLE IF NOT EXISTS Visit_Purpose (
@@ -43,13 +43,13 @@ CREATE TABLE IF NOT EXISTS Visit_Purpose (
 
 CREATE TABLE IF NOT EXISTS Visit (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    visitor_id INT,
+    visitor_phone_nr VARCHAR(15) NOT NULL,
+    visitor_name VARCHAR(255) NOT NULL,
     employee_id INT,
-    company_id INT,
+    company_id VARCHAR(20),
     checked_in DATETIME,
     checked_out DATETIME,
     visit_purpose_id INT,
-    FOREIGN KEY (visitor_id) REFERENCES Person(id),
     FOREIGN KEY (employee_id) REFERENCES Company_Employee(id),
     FOREIGN KEY (company_id) REFERENCES Company(id),
     FOREIGN KEY (visit_purpose_id) REFERENCES Visit_Purpose(id)
