@@ -116,3 +116,35 @@ def delete_address(address_id: int) -> MyResponse:
     finally:
         cursor.close()
         disconnect_from_mysql(connection)
+
+
+def check_address_exists(address: Address) -> int:
+    connection = connect_to_mysql()
+    cursor = connection.cursor()
+
+    try:
+        query = """
+            SELECT id
+            FROM VisitorTracking.Address
+            WHERE
+                street = %s
+                AND number = %s
+                AND postcode = %s
+                AND city = %s
+                AND (floor = %s OR floor IS NULL);
+        """
+
+        cursor.execute(query, (address.street, address.number, address.postcode, address.city, address.floor))
+        result = cursor.fetchone()
+        if result:
+            print("ID found:", result[0])
+            return result[0]
+        else:
+            print("Address not found")
+            return -1
+    except Exception as error:
+        print("Error checking address existence:", error)
+        return -1
+    finally:
+        cursor.close()
+        disconnect_from_mysql(connection)
